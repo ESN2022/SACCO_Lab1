@@ -1,5 +1,5 @@
 # SACCO_Lab1
-# A. Introduction
+## A. Introduction
 
 L'objectif de ce TP était de maîtriser l'utilisation de l'outil Platform Designer et de créer un premier flux de conception en mettant en œuvre un chenillard
 sur la carte DE10-Lite, contrôlé à l'aide d'un bouton poussoir et dont la vitesse pouvait être ajustée à l'aide de quatre interrupteurs. Nous commencerons 
