@@ -12,27 +12,26 @@ comment la fonctionnalité a été développée, en utilisant une méthode de ba
   
 ![NIOS2](https://user-images.githubusercontent.com/104905653/212214147-40632346-e7ab-4cf5-bd5a-44d0583bc035.png)
 
-  
   On retrouve donc les différents blocs IPs suivants:
   -NIOS2
   -JTAG-UART
-  -RAM: Étant donnée qu'elle était intialement insuffisante, j'ai augmenté sa taille à 64000 bits pour ne pas avoir de problèmes
+  -RAM: Étant donnée qu'elle était intialement insuffisante, j'ai augmenté sa taille à 32000 bits pour ne pas avoir de problème
   -1 PIO de largeur 1 bits pour le bouton poussoir
   -1 PIO de largeur 8 bits pour contrôler les 8 leds de mon chenillard
   -1 PIO de largeur 4 bits affectés à 4 interrupteurs afin de contrôler la vitesse de mon chenillard
   
-  
   Pour implémenter cette architecture, j'ouvre Platform Designer puis je sélectionne un par un les différents blocs donc j'ai besoin. J'ajoute également une horloge pour cadencer le système. Je relie l'ensemble, puis j'affecte les adresses de bases. J'obtiens enfin l'architecture suivante:
-  
-  [INSERER IMAGE QSYS]
-  
+ 
+ ![QSYS_Lab1](https://user-images.githubusercontent.com/104905653/212268953-39e0c21f-07ee-42e6-8a7d-42847f9e348a.PNG)
+
   Une fois cela fait, je sauvegarde et génère le HDL et je retourne sur Quartus pour écrire mon Top-Level, dispnible sous le nom LedChaser.vhd. Je lance alors l'Analyse et la Synthèse. Une fois cela fait, il faut encore assigner chaque broche via le Pin PLanner. Pour savoir sur quelles broche mes signaux doivent être assignés et quels doit être la tension appliquée, je m'appuie sur le Guide Utilisateur de la carte DE10-LITE. J'obtiens ainsi le Pin Assignement suivant:
   
- [INSÉRER IMAGE PIN PLANNER]
-  
+ ![Pin_planner_lab1](https://user-images.githubusercontent.com/104905653/212270197-04bf8b20-7d85-46ce-aceb-228caf2caf9f.png)
+
 Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer à la partie logicielle, avec la génération de ma BSP et l'écriture du code C.
 
 ### 2. Génération BSP
+
 On commence tout d'abord par ouvrir NIOS2 Command Shell. Afin d'organiser plus clairement mon répertoire de projet, je crée un répertoire software et 2 sous répertoire app/ et bsp/. 
 Ensuite, on génère notre BSP par la commande suivante:
 	nios2-bsp hal ./bsp ../lab1.sopcinfo
@@ -66,12 +65,28 @@ Une fois le chenillard effectué, j'éteins toutes mes lEDs:
 
 Bien que le polling soit une méthode intuitive et facile à mettre en place, elle a le désavantage de recourir en permanence au CPU. J'ai donc par la suite modifier mon code pour que le fonctionnement soit maintenant fait par interruption. Désormais, à chaque fois que l'on appuiera sur le bouton poussoir, une routine d'exécution sera effectuée.
 
-Pour cela, j'ai tout d'abord modifié mon design QSYS afin d'activer les interruptions sur la PIO du bouton poussoirs:
+Pour cela, j'ai tout d'abord modifié mon design QSYS afin d'activer les interruptions sur la PIO du bouton poussoirs ainsi que des interrupteurs:
 
-[Insérer IMAGE INTERRUPTION]
+![interrupt](https://user-images.githubusercontent.com/104905653/212270971-e7cbc424-9b9b-4b08-8b94-3257edf065ad.png)
+
+Ensuite, j'ai écrit mes deux routines d'interruptions button_irq et switch_irq. La première contient 2 boucles for permettant de faire un aller retour du chenillard. A l'aller, on décale à chaque itération la led allumée vers la gauche via la ligne:
+</p> IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i); </p>
+
+Et au retour, on décale la led allumée à chaque itération via la ligne:
+</p> IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x80>>i); </p>
+
+A la fin du chenillard, on remet toutes les leds à 0 et on réinitialise le flag de l'interruption associé au bouton poussoir via la ligne:
+IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PIO_2_BASE, 0x1);
 
 
+Pour la routine d'interruption des interrupteurs, je définis en variable globale mon timer à une valeur de 25 ms, de sorte que si je ne touche pas à mes interrupteurs, mon chenillard ait quand même une vitesse intiale. Ensuite, à chaque changement d'interrupteurs, je modifie la vitesse grâce à la formule suivante:
+	`time = time*10000 + 25000;`
+	
+Je relâche les flags associés au 4 interrupteurs.
+ Enfin, dans le main, je déclare mes interruptions et quelles routines exécutées lrosqu'elles se produisent.
+ 
 ## C. Progress and Results
+
 
 Chacunes des 2 versions produites sont fonctionnelles. Cependant, comme il s'agissait de la 1ère version du chenillard, la méthode par polling ne faisait faire qu'un aller simple à mon chenillard, ce qui fut par la suite corriger dans la version utilisant des interruptions. Voici-ci dessous une démonstration complète du chenillard:
 
