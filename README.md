@@ -16,9 +16,9 @@ comment la fonctionnalité a été développée, en utilisant une méthode de ba
   * NIOS2
   * JTAG-UART
   * RAM: Étant donnée qu'elle était intialement insuffisante, j'ai augmenté sa taille à 32000 bits pour ne pas avoir de problème
-  * PIO de largeur 1 bits pour le bouton poussoir
-  * PIO de largeur 8 bits pour contrôler les 8 leds de mon chenillard
-  * PIO de largeur 4 bits affectés à 4 interrupteurs afin de contrôler la vitesse de mon chenillard
+  * 1 PIO de largeur 1 bits pour le bouton poussoir
+  * 1 PIO de largeur 8 bits pour contrôler les 8 leds de mon chenillard
+  * 1 PIO de largeur 4 bits affectés à 4 interrupteurs afin de contrôler la vitesse de mon chenillard
   
   Pour implémenter cette architecture, j'ouvre Platform Designer puis je sélectionne un par un les différents blocs donc j'ai besoin. J'ajoute également une horloge pour cadencer le système. Je relie l'ensemble, puis j'affecte les adresses de bases. J'obtiens enfin l'architecture suivante:
  
