@@ -34,14 +34,14 @@ Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer
 
 On commence tout d'abord par ouvrir NIOS2 Command Shell. Afin d'organiser plus clairement mon répertoire de projet, je crée un répertoire software et 2 sous répertoire app/ et bsp/. 
 Ensuite, on génère notre BSP par la commande suivante:
-	nios2-bsp hal ./bsp ../lab1.sopcinfo
+`nios2-bsp hal ./bsp ../lab1.sopcinfo`
 
 Je créée ensuite mon code C disponible dans le fichier main.c puis je génère le Makefile associé:
-  nios2-app-generate-makefile --app-dir ./app/ --bsp-dir ./bsp/ --elf-name lab1.elf --src-files app/main.c
+ `nios2-app-generate-makefile --app-dir ./app/ --bsp-dir ./bsp/ --elf-name lab1.elf --src-files app/main.c`
 
 Je compile ensuite mon fichier main.c puis je le téléverse dans la carte via les 2 commandes suivantes:
-  make
-  make download-elf
+  `make
+   make download-elf`
 
 ### 3. Écriture du code C
 #### 3.1 Méthode par balayage
@@ -52,7 +52,7 @@ La méthode par balayage ou polling consiste à évaluer en continu la valeur d'
 - PIO_2_BASE: contient l'adresse de la PIO du bouton poussoir
 
 J'évalue donc en continue l'état de mon bouton poussoir grâce à la fonction suivante:
-  IORD_ALTERA_AVALON_PIO_DATA(PIO_2_BASE);
+  `IORD_ALTERA_AVALON_PIO_DATA(PIO_2_BASE);`
   
 Lorsque celle-ci est différente de 1 (actif à l'état bas), je lis alors la valeur de mes interrupteurs afin de déterminer la vitesse du chenillard.
 Je rentre ensuite dans ma boucle for, et à chaque itération je décale laquelle des Leds est allumée en écrivant dans le registre des LEDs grâce à la fonction suivante:
