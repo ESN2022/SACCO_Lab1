@@ -71,7 +71,7 @@ Enfin, dans le main, je déclare mes interruptions et quelles routines exécuté
 
 Chacunes des 2 versions produites sont fonctionnelles. Cependant, comme il s'agissait de la 1ère version du chenillard, la méthode par polling ne faisait faire qu'un aller simple à mon chenillard, ce qui fut par la suite corriger dans la version utilisant des interruptions. Voici-ci dessous une démonstration complète du chenillard:
 
-https://user-images.githubusercontent.com/104905653/212280509-51658301-c982-4e78-91b2-ce30d4d5429b.mp4
+https://user-images.githubusercontent.com/104905653/212280933-0a1a592d-6f9a-48dc-a4ff-64758649616c.mp4
 
 ## D. Conclusion
 
