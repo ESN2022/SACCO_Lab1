@@ -32,7 +32,7 @@ comment la fonctionnalité a été développée, en utilisant une méthode de ba
   
 Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer à la partie logicielle, avec la génération de ma BSP et l'écriture du code C.
 
-## Génération BSP
+### 2. Génération BSP
 On commence tout d'abord par ouvrir NIOS2 Command Shell. Afin d'organiser plus clairement mon répertoire de projet, je crée un répertoire software et 2 sous répertoire app/ et bsp/. 
 Ensuite, on génère notre BSP par la commande suivante:
 	nios2-bsp hal ./bsp ../lab1.sopcinfo
@@ -44,8 +44,8 @@ Je compile ensuite mon fichier main.c puis je le téléverse dans la carte via l
   make
   make download-elf
 
-## Écriture du code C
-### Méthode par balayage
+### 3. Écriture du code C
+#### 3.1 Méthode par balayage
 
 La méthode par balayage ou polling consiste à évaluer en continu la valeur d'une variable, de sorte que une opération puisse être directement effectuée lorsque celle-ci est modifiée. J'ai d'abord utilisé cette méthode car plus simple à mettre en place. Pour cela, j'utilise les adresses suivantes:
 - PIO_0_BASE: contient l'adresse de la PIO des LEDs
@@ -62,7 +62,7 @@ Je rentre ensuite dans ma boucle for, et à chaque itération je décale laquell
 Une fois le chenillard effectué, j'éteins toutes mes lEDs:
   IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x00);
   
-### Méthode par interruption
+#### 3.2 Méthode par interruption
 
 Bien que le polling soit une méthode intuitive et facile à mettre en place, elle a le désavantage de recourir en permanence au CPU. J'ai donc par la suite modifier mon code pour que le fonctionnement soit maintenant fait par interruption. Désormais, à chaque fois que l'on appuiera sur le bouton poussoir, une routine d'exécution sera effectuée.
 
