@@ -1,7 +1,7 @@
 # SACCO_Lab1
 ## A. Introduction
 
-L'objectif de ce TP était de maîtriser l'utilisation de l'outil Platform Designer et de créer un premier flux de conception en mettant en œuvre un chenillard
+L'objectif de ce TP était d'apprendre à utiliser l'outil Platform Designer et de créer un premier flux de conception en mettant en œuvre un chenillard
 sur la carte DE10-Lite, contrôlé à l'aide d'un bouton poussoir et dont la vitesse pouvait être ajustée à l'aide de quatre interrupteurs. Nous commencerons 
 tout d'abord par décrire l'architecture du système en présentant les composants utilisés, les choix et les étapes de conception effectués. Ensuite, nous expliquerons 
 comment la fonctionnalité a été développée, en utilisant une méthode de balayage par scrutation puis via l'utilisation d'interruptions.
@@ -24,11 +24,9 @@ comment la fonctionnalité a été développée, en utilisant une méthode de ba
  
  ![QSYS_Lab1](https://user-images.githubusercontent.com/104905653/212268953-39e0c21f-07ee-42e6-8a7d-42847f9e348a.PNG)
 
-  Une fois cela fait, je sauvegarde et génère le HDL et je retourne sur Quartus pour écrire mon Top-Level, dispnible sous le nom LedChaser.vhd. Je lance alors l'Analyse et la Synthèse. Une fois cela fait, il faut encore assigner chaque broche via le Pin PLanner. Pour savoir sur quelles broche mes signaux doivent être assignés et quels doit être la tension appliquée, je m'appuie sur le Guide Utilisateur de la carte DE10-LITE. J'obtiens ainsi le Pin Assignement suivant:
+  Une fois cela fait, je sauvegarde et génère le HDL et je retourne sur Quartus pour écrire mon Top-Level, dispnible sous le nom LedChaser.vhd. Je lance alors l'Analyse et la Synthèse. Une fois cela fait, il faut encore assigner chaque broche via le Pin PLanner. Pour savoir sur quelles broche mes signaux doivent être assignés et quelle doit être la tension appliquée, je m'appuie sur le Guide Utilisateur de la carte DE10-LITE.
   
- ![Pin_planner_lab1](https://user-images.githubusercontent.com/104905653/212270197-04bf8b20-7d85-46ce-aceb-228caf2caf9f.png)
-
-Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer à la partie logicielle, avec la génération de ma BSP et l'écriture du code C. Je génère ensuite mon BSP ainsi que mon Makefile. Je compile ensuite mon fichier main.c avant de le téléverser dans la caret grâce aux commandes vues en cours.
+Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer à la partie logicielle, avec la génération de ma BSP et l'écriture du code C. Je génère ensuite mon BSP ainsi que mon Makefile. Je compile ensuite mon fichier main.c avant de le téléverser dans la carte grâce aux commandes vues en cours.
 
 ### 2. Écriture du code C
 #### 2.1 Méthode par balayage
@@ -49,9 +47,7 @@ Une fois le chenillard effectué, j'éteins toutes mes lEDs:
 
 Bien que le polling soit une méthode intuitive et facile à mettre en place, elle a le désavantage de recourir en permanence au CPU. J'ai donc par la suite modifier mon code pour que le fonctionnement soit maintenant fait par interruption. Désormais, à chaque fois que l'on appuiera sur le bouton poussoir, une routine d'exécution sera effectuée.
 
-Pour cela, j'ai tout d'abord modifié mon design QSYS afin d'activer les interruptions sur la PIO du bouton poussoirs ainsi que des interrupteurs:
-
-![interrupt](https://user-images.githubusercontent.com/104905653/212270971-e7cbc424-9b9b-4b08-8b94-3257edf065ad.png)
+Pour cela, j'ai tout d'abord modifié mon design QSYS afin d'activer les interruptions sur la PIO du bouton poussoirs ainsi que des interrupteurs.
 
 Ensuite, j'ai écrit mes deux routines d'interruptions button_irq et switch_irq. La première contient 2 boucles for permettant de faire un aller retour du chenillard. A l'aller, on décale à chaque itération la led allumée vers la gauche via la ligne:
 ` IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i);`
@@ -65,11 +61,11 @@ A la fin du chenillard, on remet toutes les leds à 0 et on réinitialise le fla
 Pour la routine d'interruption des interrupteurs, je définis en variable globale mon timer à une valeur de 25 ms, de sorte que si je ne touche pas à mes interrupteurs, mon chenillard ait quand même une vitesse intiale. Ensuite, à chaque changement d'interrupteurs, je modifie la vitesse grâce à la formule suivante: `time = time*10000 + 25000;`
 	
 Je relâche les flags associés au 4 interrupteurs.
-Enfin, dans le main, je déclare mes interruptions et quelles routines exécutées lrosqu'elles se produisent.
+Enfin, dans le main, je déclare mes interruptions et quelles routines doivent s'exécuter lorsqu'elles se produisent.
  
 ## C. Progress and Results
 
-Chacunes des 2 versions produites sont fonctionnelles. Cependant, comme il s'agissait de la 1ère version du chenillard, la méthode par polling ne faisait faire qu'un aller simple à mon chenillard, ce qui fut par la suite corriger dans la version utilisant des interruptions. Voici-ci dessous une démonstration complète du chenillard:
+Chacunes des 2 versions produites sont fonctionnelles. Cependant, comme il s'agissait de la 1ère version du chenillard, la méthode par polling ne lui faisait faire qu'un aller simple, ce qui fut par la suite corrigé dans la version utilisant des interruptions. Voici-ci dessous une démonstration complète du chenillard:
 
 https://user-images.githubusercontent.com/104905653/212280933-0a1a592d-6f9a-48dc-a4ff-64758649616c.mp4
 
