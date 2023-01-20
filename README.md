@@ -38,8 +38,7 @@ Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer
 * PIO_2_BASE: contient l'adresse de la PIO du bouton poussoir
 
 <p align="justify">J'évalue donc en continue la valeur de mon bouton-poussoir. Lorsque celui-ci différente de 1 (actif à l'état bas), je lis alors la valeur de mes interrupteurs afin de déterminer la vitesse du chenillard.</p>
-Je rentre ensuite dans ma boucle for, et à chaque itération je décale laquelle des Leds est allumée en écrivant dans le registre des LEDs grâce à la fonction suivante: 
-` WR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i);`
+Je rentre ensuite dans ma boucle for, et à chaque itération je décale laquelle des Leds est allumée en écrivant dans le registre des LEDs grâce à la fonction suivante: `WR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i);`
 
 Une fois le chenillard effectué, j'éteins toutes mes LEDs:
 `IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x00);`
