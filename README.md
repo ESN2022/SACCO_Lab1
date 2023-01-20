@@ -37,11 +37,10 @@ Une fois cela fait, je clique sur "Assemble" et "Fitter". Je peux ensuite passer
 * PIO_1_BASE: contient l'adresse de la PIO des interrupteurs
 * PIO_2_BASE: contient l'adresse de la PIO du bouton poussoir
 
-<p align="justify">J'évalue donc en continue la valeur de mon bouton-poussoir. Lorsque celui-ci différente de 1 (actif à l'état bas), je lis alors la valeur de mes interrupteurs afin de déterminer la vitesse du chenillard.
-Je rentre ensuite dans ma boucle for, et à chaque itération je décale laquelle des Leds est allumée en écrivant dans le registre des LEDs grâce à la fonction suivante:
-` WR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i); ` </p>
+<p align="justify">J'évalue donc en continue la valeur de mon bouton-poussoir. Lorsque celui-ci différente de 1 (actif à l'état bas), je lis alors la valeur de mes interrupteurs afin de déterminer la vitesse du chenillard.</p>
+Je rentre ensuite dans ma boucle for, et à chaque itération je décale laquelle des Leds est allumée en écrivant dans le registre des LEDs grâce à la fonction suivante: ` WR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i); `
 
-Une fois le chenillard effectué, j'éteins toutes mes lEDs:
+Une fois le chenillard effectué, j'éteins toutes mes LEDs:
 `IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x00);`
   
 #### 2.2 Méthode par interruption
@@ -54,14 +53,16 @@ Ensuite, j'ai écrit mes deux routines d'interruptions button_irq et switch_irq.
 ` IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x01<<i);`
 
 Et au retour, on décale la led allumée à chaque itération via la ligne:
-` IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x80>>i);`
+` IOWR_ALTERA_AVALON_PIO_DATA(PIO_0_BASE,0x80>>i); `
 
 A la fin du chenillard, on remet toutes les leds à 0 et on réinitialise le flag de l'interruption associé au bouton poussoir via la ligne:
 ` IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PIO_2_BASE, 0x1); `
 
-<p align="justify">Pour la routine d'interruption des interrupteurs, je définis en variable globale mon timer à une valeur de 25 ms, de sorte que si je ne touche pas à mes interrupteurs, mon chenillard ait quand même une vitesse intiale. Ensuite, à chaque changement d'interrupteurs, je modifie la vitesse grâce à la formule suivante: ` time = time*10000 + 25000; ` </p>
+Pour la routine d'interruption des interrupteurs, je définis en variable globale mon timer à une valeur de 25 ms, de sorte que si je ne touche pas à mes interrupteurs, mon chenillard ait quand même une vitesse intiale. Ensuite, à chaque changement d'interrupteurs, je modifie la vitesse grâce à la formule suivante:
+` time = time * 10000+25000; ` 
+
 	
-<p align="justify">üis je relâche les flags associés au 4 interrupteurs. Enfin, dans le main, je déclare mes interruptions et quelles routines doivent s'exécuter lorsqu'elles se produisent. </p>
+<p align="justify">Puis je relâche les flags associés au 4 interrupteurs. Enfin, dans le main, je déclare mes interruptions et quelles routines doivent s'exécuter lorsqu'elles se produisent. </p>
  
 ## C. Progress and Results
 
