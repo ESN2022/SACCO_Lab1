@@ -1,4 +1,4 @@
-# SACCO_Lab1 - Let there be light
+# SACCO_Lab1 - "Let there be light"
 ## Introduction
 
 <p align="justify">L'objectif de ce TP était d'apprendre à utiliser l'outil Platform Designer et de créer un premier flux de conception en mettant en œuvre un chenillard
